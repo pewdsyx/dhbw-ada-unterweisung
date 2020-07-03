@@ -4,9 +4,11 @@
 %
 \usepackage[ngerman]{babel} 	% German language
 \usepackage[utf8]{inputenc}
+\usepackage{eurosym} % Euro symbol 
 \usepackage[german=quotes]{csquotes} 	% correct quotes using \enquote{}
 \usepackage[T1]{fontenc}
 \usepackage{amssymb} % Mathe-Package
+\usepackage{pdfpages} % for appendix pdfs
 
 
 %\usepackage[english]{babel}   % For english language
@@ -15,7 +17,7 @@
 % 		HYPERREF
 %
 \usepackage[
-	hidelinks=true % keine roten Markierungen bei Links
+hidelinks=true % keine roten Markierungen bei Links
 ]{hyperref}
 
 % Zwei eigene Befehle zum Setzen von Autor und Titel. Ausserdem werden die PDF-Informationen richtig gesetzt.
@@ -81,11 +83,11 @@
 \makeatletter
 \usepackage[printonlyused]{acronym}
 \@ifpackagelater{acronym}{2015/03/20}
-  {%
-    \renewcommand*{\aclabelfont}[1]{\textbf{\textsf{\acsfont{#1}}}}
-  }%
-  {%
-  }%
+{%
+	\renewcommand*{\aclabelfont}[1]{\textbf{\textsf{\acsfont{#1}}}}
+}%
+{%
+}%
 \makeatother
 
 %		LISTINGS
@@ -96,16 +98,65 @@
 	numberstyle=\tiny,
 	captionpos=b,
 	basicstyle=\ttfamily\small,
+	commentstyle=\itshape,
 	breaklines=true, 
 	breakatwhitespace=true,
 	showstringspaces=false,
-	escapechar=|}
+	escapeinside={@@},
+	keywordstyle=\bfseries,
+	postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookrightarrow\space}}
+}
+
+%LISTING inline a tabular/table
+\newcommand\tablstinline[2][]{\lstinline[#1]{#2}}
 
 % LISTINGS: eigene Programmiersprache; bei morekeywords die zusätzlichen einfügen
 \lstdefinelanguage{PLSQL}{
 	language     = SQL,
 	morekeywords = {over, partition}}
 
+% ---- LISTING FOR YAML FILES ----
+%\usepackage[dvipsnames]{xcolor}
+%\usepackage{listings}
+\usepackage{color}
+\newcommand\YAMLcolonstyle{\color{red}\mdseries}
+\newcommand\YAMLkeystyle{\color{black}\bfseries}
+\newcommand\YAMLvaluestyle{\color{black}\mdseries}
+
+\makeatletter
+
+% here is a macro expanding to the name of the language
+% (handy if you decide to change it further down the road)
+\newcommand\language@yaml{yaml}
+
+\expandafter\expandafter\expandafter\lstdefinelanguage
+\expandafter{\language@yaml}
+{
+	keywords={true,false,null,y,n},
+	keywordstyle=\color{darkgray}\bfseries,
+	basicstyle=\YAMLkeystyle,                                 % assuming a key comes first
+	sensitive=false,
+	comment=[l]{\#},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\YAMLvaluestyle\ttfamily,
+	moredelim=[l][\color{orange}]{\&},
+	moredelim=[l][\color{magenta}]{*},
+	moredelim=**[il][\YAMLcolonstyle{:}\YAMLvaluestyle]{:},   % switch to value style at :
+	morestring=[b]',
+	morestring=[b]",
+	literate =    {---}{{\ProcessThreeDashes}}3
+	{>}{{\textcolor{red}\textgreater}}1     
+	{|}{{\textcolor{red}\textbar}}1 
+	{\ -\ }{{\mdseries\ -\ }}3,
+}
+
+% switch to key style at EOL
+\lst@AddToHook{EveryLine}{\ifx\lst@language\language@yaml\YAMLkeystyle\fi}
+\makeatother
+
+\newcommand\ProcessThreeDashes{\llap{\color{cyan}\mdseries-{-}-}}
+% --------------------------
 
 %		EXTRA PACKAGES
 \usepackage{lipsum}    %Blindtext
@@ -113,12 +164,14 @@
 \usepackage[german]{varioref} 	% nicer references \vref
 \usepackage{caption}	%better Captions
 \usepackage{booktabs} %nicer Tabs
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\usepackage{longtable} %multipages booktabs
 \usepackage{array}
 %\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 
 
 %		ALGORITHMS
-\usepackage{algorithm}
+\usepackage{algorithm} %float wrapper for algorithms.
 \usepackage{algpseudocode}
 \renewcommand{\listalgorithmname}{Algorithmenverzeichnis }
 \floatname{algorithm}{Algorithmus}
@@ -131,7 +184,8 @@
 
 %		PAGE HEADER / FOOTER
 %	    Warning: There are some redefinitions throughout the master.tex-file!  DON'T CHANGE THESE REDEFINITIONS!
-\RequirePackage[automark,headsepline,footsepline]{scrpage2}
+%\RequirePackage[automark,headsepline,footsepline]{scrpage2}
+\RequirePackage[automark,headsepline,footsepline]{scrlayer-scrpage}
 \pagestyle{scrheadings}
 \renewcommand*{\pnumfont}{\upshape\sffamily}
 \renewcommand*{\headfont}{\upshape\sffamily}
@@ -139,6 +193,7 @@
 \renewcommand{\chaptermarkformat}{}
 \RedeclareSectionCommand[beforeskip=0pt]{chapter}
 \clearscrheadfoot
+
 
 \ifoot[\rule{0pt}{\ht\strutbox+\dp\strutbox}DHBW Mannheim]{\rule{0pt}{\ht\strutbox+\dp\strutbox}DHBW Mannheim}
 \ofoot[\rule{0pt}{\ht\strutbox+\dp\strutbox}\pagemark]{\rule{0pt}{\ht\strutbox+\dp\strutbox}\pagemark}
