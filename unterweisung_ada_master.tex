@@ -30,6 +30,7 @@
 
 \begin{document}
 
+%TODO: Bitte passen!
 %% BITTE GEBEN SIE HIER DEN TITEL UND DIE AUTORIN / DEN AUTOR DER ARBEIT AN!
 %% DIESE INFORMATIONEN _MÜSSEN_ GESETZT SEIN, UM TITELBLATT, ABSTRACT UND
 %% EIGENSTÄNDIGKEITSERKLÄRUNG AUTOMATISCH ANZUPASSEN!
@@ -38,6 +39,10 @@
 \AutorDerArbeit{Yves Torsten Staudenmaier}
 \Firma{SV Informatik GmbH}
 \Kurs{WWI17SEC}
+\DieFachrichtungDerAusbildung{Daten- und Prozessanalyse}
+\DieBerufsausbildung{Berufsausbildung zur Fachinformatikerin (m/w/d)}
+
+%---------------------------------------------------------------------------
 
 \input{titlepage}
 
@@ -93,17 +98,20 @@
 % Kapitel einbinden
 %-----------------
 
+
 \input{chapter/1_einleitung}
 \input{chapter/2_rahmenbedingungen}
 \input{chapter/3_lernziele}
-\input{chapter/4_planungUndDurchführung}
-\input{chapter/5_lehrUndArbeitsmittel}
+\input{chapter/4_motivation}
+\input{chapter/5_paedPrin}
+\input{chapter/6_handlungskompetenz}
+\input{chapter/7_unterweisungsplan}
 
 %-----------------
 
 \clearpage
 \pagenumbering{Roman}
-\setcounter{page}{10} %TODO: schauen, ob die "9" passt.
+\setcounter{page}{7} %TODO: schauen, ob die "9" passt.
 
 %	Literaturverzeichnis
 \printbibliography[title=Literaturverzeichnis]
